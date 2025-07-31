@@ -1,43 +1,32 @@
-include "backend" {
-  path = find_in_parent_folders("include_backend.hcl")
+include "root" {
+  path = find_in_parent_folders("common.hcl")
+}
+
+include "env" {
+  path = find_in_parent_folders("env.hcl")
 }
 
 locals {
-  cfg      = read_terragrunt_config(find_in_parent_folders("terragrunt.hcl")).locals
-  env_cfg  = read_terragrunt_config("${get_terragrunt_dir()}/../env.hcl").locals
+  cfg      = read_terragrunt_config(find_in_parent_folders("common.hcl")).locals
+  env_cfg  = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals
+}
+
+dependency "network" {
+  config_path = "../network"
+  # mock_outputs = {
+  #   subnet_ids = {
+  #     "subnet-db" = "/mock/subnet/id" # Used for `terragrunt plan` when network hasn't been applied
+  #   }
+  # }
 }
 
 terraform {
   source = "../../../modules/network_security_group"
 }
 
-dependency "rg" {
-  config_path = "../resource_group"
-}
-
-dependency "network" {
-  config_path = "../network"
-  mock_outputs = {
-    subnet_ids = {
-      "subnet-db" = "/mock/subnet/id" # Used for `terragrunt plan` when network hasn't been applied
-    }
-  }
-}
-
-generate "provider" {
-  path      = "provider.tf"
-  if_exists = "overwrite_terragrunt"
-  contents  = <<EOF
-provider "azurerm" {
-  features        {}
-  subscription_id = "${local.env_cfg.subscription_id}"
-}
-EOF
-}
-
 inputs = {
   location              = local.cfg.location
-  resource_group_name   = dependency.rg.outputs.name
+  resource_group_name   = local.env_cfg.resource_group_name
   tags = merge(
     local.cfg.default_tags,{
       Environment = local.env_cfg.env
@@ -69,7 +58,7 @@ inputs = {
     "nsg-db" = {
       nsg_name              = "nsg-allow-mysql"
       location              = local.cfg.location
-      resource_group_name   = dependency.rg.outputs.name
+      resource_group_name   = local.env_cfg.resource_group_name
       tags = merge(
         local.cfg.default_tags,{
           Environment = local.env_cfg.env

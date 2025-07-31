@@ -4,3 +4,7 @@ output "subnet_ids" {
     name => subnet.id
   }
 }
+
+output "id" {
+  value = azurerm_virtual_network.this.id
+}

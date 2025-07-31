@@ -5,3 +5,7 @@ output "name" {
 output "id" {
   value = azurerm_storage_account.this.id
 }
+
+output "principal_id" {
+  value = azurerm_storage_account.this.identity[0].principal_id
+}

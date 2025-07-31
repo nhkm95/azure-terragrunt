@@ -28,19 +28,66 @@ variable "min_tls_version" {
   default     = "TLS1_2"
 }
 
+variable "create_container" {
+  type    = bool
+  default = false
+}
+
 variable "container_name" {
-  type        = string
+  type    = string
   default = ""
 }
 
 variable "container_access_type" {
-  type = string
+  type    = string
   default = "private"
 }
 
 variable "tags" {
   type = map(string)
-  default = {
-    
-  }
+  default = {}
+}
+
+variable "large_file_share_enabled" {
+  type = bool
+  default = false
+}
+
+variable "public_network_access_enabled" {
+  type = bool
+  default = false
+}
+
+variable "identity_type" {
+  description = "Type of identity to use: 'None', 'SystemAssigned', 'UserAssigned', or 'SystemAssigned, UserAssigned'"
+  type        = string
+  default     = "None"
+}
+
+variable "identity_ids" {
+  description = "List of User Assigned Identity IDs"
+  type        = list(string)
+  default     = []
+}
+
+variable "default_action" {
+  type = string
+  default = "Deny"
+}
+
+variable "ip_rules" {
+  type = list(string)
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+variable "bypass" {
+  type = list(string)
+}
+
+variable "create_network_rules" {
+  type = bool
+  default = false
 }
