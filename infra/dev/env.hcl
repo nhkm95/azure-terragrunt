@@ -1,6 +1,6 @@
 locals {
   env             = "dev"
-  subscription_id = get_env("ARM_SUBSCRIPTION_ID", "00000000-0000-0000-0000-000000000000")
+  subscription_id = get_env("subscription_id", "00000000-0000-0000-0000-000000000000")
   storage_account_name = "nhbstfstatestorage"
   container_name = "tfstate"
   vnet_name = "vnet-dev"
