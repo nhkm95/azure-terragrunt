@@ -1,6 +1,6 @@
 locals {
   location        = "southeastasia"
-  project         = "nhbs"
+  project         = get_env("project_name","xxx")
   terragrunt_version = "0.83.2"
 
   default_tags = {

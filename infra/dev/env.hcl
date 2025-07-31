@@ -9,7 +9,7 @@ locals {
   node_subnet_cidr = ["10.0.1.0/24"]
   service_endpoints = ["Microsoft.Storage"]
   nsg_name_mysql = "nsg-MySQL"
-  resource_group_name  = "rg-nhbs-dev"
+  resource_group_name  = get_env("resource_group_name", "xxx")
   storage_account_tfstate = "nhbstfstatedev"
   tfstate_container       = "tfstate"
   db_dns_zone_name = "${local.cfg.project}.dev.mysql.database.azure.com"
